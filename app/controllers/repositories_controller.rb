@@ -1,7 +1,9 @@
+require 'pry'
 class RepositoriesController < ApplicationController
   def index
-    response = Faraday.get "https://api.github.com/user/repos", {}, {'Authorization' => "token #{session[:token]}", 'Accept' => 'application/json'}
-    @repos_array = JSON.parse(response.body)
+    githubservice = GithubService.new
+    session[:username] = githubservice.get_username
+    @repos_array = githubservice.get_repos
   end
 
   def create
